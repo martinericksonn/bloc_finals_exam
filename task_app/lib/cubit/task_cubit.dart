@@ -13,6 +13,18 @@ class TaskCubit extends Cubit<TaskState> {
           removedTasks: [],
           favoriteTasks: [],
         ));
+  int get pendingTasksLength => state.pendingTasks.length;
+  int get completedTasksLength => state.completedTasks.length;
+  int get removedTasksLength => state.pendingTasks.length;
+  int get favoriteTasksLength => state.favoriteTasks.length;
+
+  void _emitState() {
+    emit(TaskState(
+        pendingTasks: state.pendingTasks,
+        completedTasks: state.completedTasks,
+        removedTasks: state.removedTasks,
+        favoriteTasks: state.favoriteTasks));
+  }
 
   void addEditTask(String title, String description, isEdit) {
     if (isEdit != null) {
@@ -22,15 +34,16 @@ class TaskCubit extends Cubit<TaskState> {
       state.pendingTasks.add(task);
     }
 
-    emit(TaskState(
-        pendingTasks: state.pendingTasks,
-        completedTasks: state.completedTasks,
-        removedTasks: state.removedTasks,
-        favoriteTasks: state.favoriteTasks));
+    _emitState();
   }
 
-  int get pendingTasksLength => state.pendingTasks.length;
-  int get completedTasksLength => state.completedTasks.length;
-  int get removedTasksLength => state.pendingTasks.length;
-  int get favoriteTasksLength => state.favoriteTasks.length;
+  void markDoneTask(Task task) {
+    int index =
+        state.pendingTasks.indexWhere((element) => element.id == task.id);
+
+    state.completedTasks.add(state.pendingTasks[index]);
+    state.pendingTasks.remove(state.pendingTasks[index]);
+
+    _emitState();
+  }
 }
