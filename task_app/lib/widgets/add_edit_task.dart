@@ -25,9 +25,11 @@ class _AddEditTaskState extends State<AddEditTask> {
     final task = widget.task;
 
     if (task != null) {
+      print("not");
       _title = task.title;
       _description = task.description;
     } else {
+      print("null");
       _title = '';
       _description = '';
     }

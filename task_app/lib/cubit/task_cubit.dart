@@ -26,18 +26,41 @@ class TaskCubit extends Cubit<TaskState> {
         favoriteTasks: state.favoriteTasks));
   }
 
-  void addEditTask(String title, String description, isEdit) {
-    if (isEdit != null) {
-    } else {
+  void addEditTask(String title, String description, task) {
+    print("zzz");
+    List<List<Task>> taskCategories = [
+      state.pendingTasks,
+      state.completedTasks,
+      state.favoriteTasks
+    ];
+    if (task == null) {
       Task task = Task(title: title, description: description);
-
       state.pendingTasks.add(task);
-    }
 
-    _emitState();
+      _emitState();
+      return;
+    }
+    print("hellooooo");
+    for (List<Task> categories in taskCategories) {
+      var index = categories.indexWhere((element) => element.id == task.id);
+      if (index != -1) {
+        print(categories[index]);
+        print(categories);
+      }
+    }
+    // if (state.completedTasks. !=
+    //     -1) {}
+
+    // if (state.favoriteTasks.indexWhere((element) => element.id == task.id) !=
+    //     -1) {}
+
+    // if (state.pendingTasks.indexWhere((element) => element.id == task.id) !=
+    //     -1) {}
   }
 
-  void completedTask(Task task) {
+  void completedTask(
+    Task task,
+  ) {
     if (task.isDone == true) {
       int index =
           state.completedTasks.indexWhere((element) => element.id == task.id);
@@ -55,7 +78,6 @@ class TaskCubit extends Cubit<TaskState> {
         state.pendingTasks.indexWhere((element) => element.id == task.id);
 
     var doneTask = state.pendingTasks[index].copyWith(isDone: true);
-    print(doneTask);
     state.completedTasks.add(doneTask);
     state.pendingTasks.remove(state.pendingTasks[index]);
 
