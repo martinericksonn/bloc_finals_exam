@@ -19,8 +19,11 @@ class FavoriteTasksScreen extends StatelessWidget {
         children: [
           Center(
             child: Chip(
-              label: Text(
-                  '${context.read<TaskCubit>().favoriteTasksLength} Tasks'),
+              label: BlocBuilder<TaskCubit, TaskState>(
+                builder: (context, state) {
+                  return Text('${state.favoriteTasks.length} Tasks');
+                },
+              ),
             ),
           ),
           const SizedBox(height: 10),

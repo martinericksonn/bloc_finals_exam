@@ -20,7 +20,7 @@ class PendingTasksScreen extends StatelessWidget {
               label: BlocBuilder<TaskCubit, TaskState>(
                 builder: (context, state) {
                   return Text(
-                    '${context.read<TaskCubit>().pendingTasksLength} Pending | ${context.read<TaskCubit>().completedTasksLength} Completed',
+                    '${state.pendingTasks.length} Pending | ${state.completedTasks.length} Completed',
                   );
                 },
               ),
