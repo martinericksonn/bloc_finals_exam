@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:task_app/cubit/task_cubit.dart';
 
 import '../models/task.dart';
 import '../test_data.dart';
@@ -17,11 +19,20 @@ class CompletedTasksScreen extends StatelessWidget {
         children: [
           Center(
             child: Chip(
-              label: Text('${tasksList.length} Tasks'),
+              label: BlocBuilder<TaskCubit, TaskState>(
+                builder: (context, state) {
+                  return Text(
+                      '${context.read<TaskCubit>().completedTasksLength} Tasks');
+                },
+              ),
             ),
           ),
           const SizedBox(height: 10),
-          TasksList(tasksList: tasksList),
+          BlocBuilder<TaskCubit, TaskState>(
+            builder: (context, state) {
+              return TasksList(tasksList: state.completedTasks);
+            },
+          ),
         ],
       ),
     );
