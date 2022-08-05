@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:task_app/cubit/task_cubit.dart';
 
 import 'app_router.dart';
 import 'app_themes.dart';
@@ -17,11 +19,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'BloC Tasks App',
-      theme: AppThemes.appThemeData[AppTheme.lightMode],
-      home: const TabsScreen(),
-      onGenerateRoute: appRouter.onGenerateRoute,
+    return BlocProvider<TaskCubit>(
+      create: (context) => TaskCubit(),
+      child: MaterialApp(
+        title: 'BloC Tasks App',
+        theme: AppThemes.appThemeData[AppTheme.lightMode],
+        home: const TabsScreen(),
+        onGenerateRoute: appRouter.onGenerateRoute,
+      ),
     );
   }
 }
