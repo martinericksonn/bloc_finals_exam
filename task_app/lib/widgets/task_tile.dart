@@ -108,7 +108,9 @@ class TaskTile extends StatelessWidget {
                 );
                 // print("why");
               },
-              likeOrDislikeCallback: () {},
+              likeOrDislikeCallback: () {
+                context.read<TaskCubit>().favoriteTask(task);
+              },
               cancelOrDeleteCallback: () {},
               restoreTaskCallback: () => {},
             ),

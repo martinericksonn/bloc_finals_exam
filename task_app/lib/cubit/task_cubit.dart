@@ -1,6 +1,9 @@
+import 'dart:ffi';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:task_app/models/task.dart';
 
 part 'task_state.dart';
@@ -82,5 +85,42 @@ class TaskCubit extends Cubit<TaskState> {
     state.pendingTasks.remove(state.pendingTasks[index]);
 
     _emitState();
+  }
+
+  void favoriteTask(Task task) {
+    print("object");
+    List<List<Task>> taskCategories = [
+      state.pendingTasks,
+      state.completedTasks,
+    ];
+
+    for (List<Task> categories in taskCategories) {
+      var index = categories.indexWhere((element) => element.id == task.id);
+
+      if (index != -1) {
+        var currentTask =
+            categories[index].copyWith(isFavorite: !task.isFavorite!);
+        categories[index] = currentTask;
+
+        if (currentTask.isFavorite!) {
+          state.favoriteTasks.add(currentTask);
+        } else {
+          state.favoriteTasks.remove(task);
+        }
+
+        _emitState();
+        return;
+      }
+    }
+
+    // if (task.isFavorite == true) {
+    //   task.copyWith(isFavorite: false);
+    //   state.favoriteTasks.remove(task);
+    //   _emitState();
+    //   return;
+    // }
+
+    // task.copyWith(isFavorite: true);
+    // state.favoriteTasks.add(task);
   }
 }
