@@ -21,8 +21,7 @@ class CompletedTasksScreen extends StatelessWidget {
             child: Chip(
               label: BlocBuilder<TaskCubit, TaskState>(
                 builder: (context, state) {
-                  return Text(
-                      '${context.read<TaskCubit>().completedTasksLength} Tasks');
+                  return Text('${state.completedTasks.length} Tasks');
                 },
               ),
             ),

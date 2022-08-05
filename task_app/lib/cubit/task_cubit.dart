@@ -16,10 +16,10 @@ class TaskCubit extends Cubit<TaskState> {
           removedTasks: [],
           favoriteTasks: [],
         ));
-  int get pendingTasksLength => state.pendingTasks.length;
-  int get completedTasksLength => state.completedTasks.length;
-  int get removedTasksLength => state.pendingTasks.length;
-  int get favoriteTasksLength => state.favoriteTasks.length;
+  // int get pendingTasksLength => state.pendingTasks.length;
+  // int get completedTasksLength => state.completedTasks.length;
+  // int get removedTasksLength => state.pendingTasks.length;
+  // int get favoriteTasksLength => state.favoriteTasks.length;
 
   void _emitState() {
     emit(TaskState(
@@ -73,7 +73,6 @@ class TaskCubit extends Cubit<TaskState> {
       state.completedTasks.remove(state.completedTasks[index]);
 
       _emitState();
-
       return;
     }
 
@@ -88,10 +87,10 @@ class TaskCubit extends Cubit<TaskState> {
   }
 
   void favoriteTask(Task task) {
-    print("object");
     List<List<Task>> taskCategories = [
       state.pendingTasks,
       state.completedTasks,
+      state.removedTasks
     ];
 
     for (List<Task> categories in taskCategories) {
@@ -112,15 +111,31 @@ class TaskCubit extends Cubit<TaskState> {
         return;
       }
     }
+  }
 
-    // if (task.isFavorite == true) {
-    //   task.copyWith(isFavorite: false);
-    //   state.favoriteTasks.remove(task);
-    //   _emitState();
-    //   return;
-    // }
+  void deleteTask(Task task) {
+    List<List<Task>> taskCategories = [
+      state.pendingTasks,
+      state.completedTasks,
+      state.favoriteTasks
+    ];
 
-    // task.copyWith(isFavorite: true);
-    // state.favoriteTasks.add(task);
+    for (List<Task> categories in taskCategories) {
+      var index = categories.indexWhere((element) => element.id == task.id);
+
+      if (index != -1) {
+        var deletedTask =
+            categories[index].copyWith(isDeleted: !task.isDeleted!);
+
+        categories.remove(task);
+
+        if (!state.removedTasks.contains(deletedTask)) {
+          state.removedTasks.add(deletedTask);
+        }
+      }
+    }
+
+    _emitState();
+    return;
   }
 }
