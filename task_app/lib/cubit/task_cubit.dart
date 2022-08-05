@@ -96,20 +96,17 @@ class TaskCubit extends Cubit<TaskState> {
     for (List<Task> categories in taskCategories) {
       var index = categories.indexWhere((element) => element.id == task.id);
 
-      if (index != -1) {
-        var currentTask =
-            categories[index].copyWith(isFavorite: !task.isFavorite!);
-        categories[index] = currentTask;
+      if (index == -1) continue;
 
-        if (currentTask.isFavorite!) {
-          state.favoriteTasks.add(currentTask);
-        } else {
-          state.favoriteTasks.remove(task);
-        }
+      var currentTask =
+          categories[index].copyWith(isFavorite: !task.isFavorite!);
+      categories[index] = currentTask;
 
-        _emitState();
-        return;
-      }
+      currentTask.isFavorite!
+          ? state.favoriteTasks.add(currentTask)
+          : state.favoriteTasks.remove(task);
+
+      _emitState();
     }
   }
 
@@ -120,18 +117,23 @@ class TaskCubit extends Cubit<TaskState> {
       state.favoriteTasks
     ];
 
+    if (task.isDeleted!) {
+      state.removedTasks.remove(task);
+      _emitState();
+      return;
+    }
+
     for (List<Task> categories in taskCategories) {
       var index = categories.indexWhere((element) => element.id == task.id);
+      if (index == -1) {
+        continue;
+      }
 
-      if (index != -1) {
-        var deletedTask =
-            categories[index].copyWith(isDeleted: !task.isDeleted!);
+      var deletedTask = categories[index].copyWith(isDeleted: !task.isDeleted!);
+      categories.remove(task);
 
-        categories.remove(task);
-
-        if (!state.removedTasks.contains(deletedTask)) {
-          state.removedTasks.add(deletedTask);
-        }
+      if (!state.removedTasks.contains(deletedTask)) {
+        state.removedTasks.add(deletedTask);
       }
     }
 
