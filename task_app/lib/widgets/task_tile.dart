@@ -12,7 +12,23 @@ class TaskTile extends StatelessWidget {
 
   final Task task;
 
+  void _addNewTask(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) => SingleChildScrollView(
+        child: Container(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+          ),
+          child: const AddEditTask(),
+        ),
+      ),
+    );
+  }
+
   _editTask(BuildContext context) {
+    print(task);
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -71,15 +87,30 @@ class TaskTile extends StatelessWidget {
                 onChanged: task.isDeleted!
                     ? null
                     : (value) {
-                        context.read<TaskCubit>().markDoneTask(task);
+                        context.read<TaskCubit>().completedTask(task);
                       }),
             PopupMenu(
               task: task,
               editCallback: () {
+                // print("editcallback");
                 Navigator.pop(context);
-                _editTask(context);
+                showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  builder: (context) => SingleChildScrollView(
+                    child: Container(
+                      padding: EdgeInsets.only(
+                        bottom: MediaQuery.of(context).viewInsets.bottom,
+                      ),
+                      child: AddEditTask(task: task),
+                    ),
+                  ),
+                );
+                // print("why");
               },
-              likeOrDislikeCallback: () {},
+              likeOrDislikeCallback: () {
+                context.read<TaskCubit>().favoriteTask(task);
+              },
               cancelOrDeleteCallback: () {},
               restoreTaskCallback: () => {},
             ),
