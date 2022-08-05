@@ -17,8 +17,12 @@ class PendingTasksScreen extends StatelessWidget {
         children: [
           Center(
             child: Chip(
-              label: Text(
-                '${context.read<TaskState>().pendingTasks.length} Pending | ${TestData.completedTasks.length} Completed',
+              label: BlocBuilder<TaskCubit, TaskState>(
+                builder: (context, state) {
+                  return Text(
+                    '${context.read<TaskCubit>().pendingTasksLength} Pending | ${TestData.completedTasks.length} Completed',
+                  );
+                },
               ),
             ),
           ),
