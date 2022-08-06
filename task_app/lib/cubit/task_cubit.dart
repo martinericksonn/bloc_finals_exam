@@ -16,10 +16,6 @@ class TaskCubit extends Cubit<TaskState> {
           removedTasks: [],
           favoriteTasks: [],
         ));
-  // int get pendingTasksLength => state.pendingTasks.length;
-  // int get completedTasksLength => state.completedTasks.length;
-  // int get removedTasksLength => state.pendingTasks.length;
-  // int get favoriteTasksLength => state.favoriteTasks.length;
 
   void _emitState() {
     emit(TaskState(
@@ -30,12 +26,12 @@ class TaskCubit extends Cubit<TaskState> {
   }
 
   void addEditTask(String title, String description, task) {
-    print("zzz");
     List<List<Task>> taskCategories = [
       state.pendingTasks,
       state.completedTasks,
       state.favoriteTasks
     ];
+
     if (task == null) {
       Task task = Task(title: title, description: description);
       state.pendingTasks.add(task);
@@ -43,22 +39,17 @@ class TaskCubit extends Cubit<TaskState> {
       _emitState();
       return;
     }
-    print("hellooooo");
+
     for (List<Task> categories in taskCategories) {
       var index = categories.indexWhere((element) => element.id == task.id);
-      if (index != -1) {
-        print(categories[index]);
-        print(categories);
-      }
+      if (index == -1) continue;
+
+      categories[index] = categories[index]
+          .copyWith(description: description)
+          .copyWith(title: title);
+
+      _emitState();
     }
-    // if (state.completedTasks. !=
-    //     -1) {}
-
-    // if (state.favoriteTasks.indexWhere((element) => element.id == task.id) !=
-    //     -1) {}
-
-    // if (state.pendingTasks.indexWhere((element) => element.id == task.id) !=
-    //     -1) {}
   }
 
   void completedTask(
@@ -75,7 +66,6 @@ class TaskCubit extends Cubit<TaskState> {
       _emitState();
       return;
     }
-
     int index =
         state.pendingTasks.indexWhere((element) => element.id == task.id);
 
@@ -95,7 +85,6 @@ class TaskCubit extends Cubit<TaskState> {
 
     for (List<Task> categories in taskCategories) {
       var index = categories.indexWhere((element) => element.id == task.id);
-
       if (index == -1) continue;
 
       var currentTask =
@@ -128,7 +117,6 @@ class TaskCubit extends Cubit<TaskState> {
       if (index == -1) {
         continue;
       }
-
       var deletedTask = categories[index].copyWith(isDeleted: !task.isDeleted!);
       categories.remove(task);
 
