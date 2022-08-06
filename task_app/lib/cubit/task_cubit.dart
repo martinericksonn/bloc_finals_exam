@@ -1,14 +1,14 @@
-import 'dart:ffi';
+// ignore_for_file: depend_on_referenced_packages
 
+import 'dart:convert';
 import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
+
 import 'package:task_app/models/task.dart';
 
 part 'task_state.dart';
 
-class TaskCubit extends Cubit<TaskState> {
+class TaskCubit extends Cubit<TaskState> with HydratedMixin {
   TaskCubit()
       : super(TaskState(
           pendingTasks: [],
@@ -150,5 +150,15 @@ class TaskCubit extends Cubit<TaskState> {
     state.removedTasks.clear();
 
     _emitState();
+  }
+
+  @override
+  TaskState? fromJson(Map<String, dynamic> json) {
+    return TaskState.fromMap(json);
+  }
+
+  @override
+  Map<String, dynamic>? toJson(TaskState state) {
+    return state.toMap();
   }
 }
