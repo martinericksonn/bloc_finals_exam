@@ -140,4 +140,21 @@ class TaskCubit extends Cubit<TaskState> {
     _emitState();
     return;
   }
+
+  void restoreTask(Task task) {
+    state.removedTasks.remove(task);
+    task.copyWith(isDeleted: false);
+
+    if (task.isDone!) {
+      state.completedTasks.add(task);
+    } else {
+      state.pendingTasks.add(task);
+    }
+
+    if (task.isFavorite!) {
+      state.favoriteTasks.add(task);
+    }
+
+    _emitState();
+  }
 }
