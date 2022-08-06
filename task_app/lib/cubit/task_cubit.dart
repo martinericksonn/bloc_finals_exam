@@ -143,7 +143,7 @@ class TaskCubit extends Cubit<TaskState> {
 
   void restoreTask(Task task) {
     state.removedTasks.remove(task);
-    task.copyWith(isDeleted: false);
+    task = task.copyWith(isDeleted: false);
 
     if (task.isDone!) {
       state.completedTasks.add(task);
@@ -154,6 +154,12 @@ class TaskCubit extends Cubit<TaskState> {
     if (task.isFavorite!) {
       state.favoriteTasks.add(task);
     }
+
+    _emitState();
+  }
+
+  void deleteALl() {
+    state.removedTasks.clear();
 
     _emitState();
   }
