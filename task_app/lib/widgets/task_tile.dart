@@ -12,23 +12,7 @@ class TaskTile extends StatelessWidget {
 
   final Task task;
 
-  void _addNewTask(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      builder: (context) => SingleChildScrollView(
-        child: Container(
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom,
-          ),
-          child: const AddEditTask(),
-        ),
-      ),
-    );
-  }
-
   _editTask(BuildContext context) {
-    print(task);
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -94,18 +78,7 @@ class TaskTile extends StatelessWidget {
               editCallback: () {
                 // print("editcallback");
                 Navigator.pop(context);
-                showModalBottomSheet(
-                  context: context,
-                  isScrollControlled: true,
-                  builder: (context) => SingleChildScrollView(
-                    child: Container(
-                      padding: EdgeInsets.only(
-                        bottom: MediaQuery.of(context).viewInsets.bottom,
-                      ),
-                      child: AddEditTask(task: task),
-                    ),
-                  ),
-                );
+                _editTask(context);
                 // print("why");
               },
               likeOrDislikeCallback: () {

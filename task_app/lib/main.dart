@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:task_app/cubit/task_cubit.dart';
 import 'package:task_app/cubit/theme_cubit.dart';
 
@@ -7,7 +9,15 @@ import 'app_router.dart';
 import 'app_themes.dart';
 import 'screens/tabs_screen.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final storage = await HydratedStorage.build(
+    storageDirectory: await getApplicationDocumentsDirectory(),
+  );
+  HydratedBlocOverrides.runZoned(
+    () => runApp(MyApp(appRouter: AppRouter())),
+    storage: storage,
+  );
   runApp(
     MyApp(appRouter: AppRouter()),
   );
