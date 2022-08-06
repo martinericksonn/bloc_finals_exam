@@ -52,9 +52,7 @@ class TaskCubit extends Cubit<TaskState> with HydratedMixin {
     }
   }
 
-  void completedTask(
-    Task task,
-  ) {
+  void completedTask(Task task) {
     if (task.isDone == true) {
       int index =
           state.completedTasks.indexWhere((element) => element.id == task.id);
